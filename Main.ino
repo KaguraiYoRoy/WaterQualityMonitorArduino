@@ -1,3 +1,5 @@
+#include <ArduinoJson.h>
+
 #include "TDS.h"
 #include "LM35.h"
 #include "OneWire.h"
@@ -25,26 +27,39 @@ void setup() {
 }
 
 void processcom(char cmd){
-  if(cmd == 'g'){
-    float WaterTempValue;
+  StaticJsonDocument<200> jsonBuffer;
+  String output;
+  switch(cmd){
+    case 13:break;
+    case 'g':{
+      float WaterTempValue;
 
-    sensors.requestTemperatures();
-    WaterTempValue = sensors.getTempCByIndex(0);
+      sensors.requestTemperatures();
+      WaterTempValue = sensors.getTempCByIndex(0);
   
-    Serial.print("{\"WaterTemp\":");
-    Serial.print(WaterTempValue);
-    Serial.print(",\"TDS\":");
-    Serial.print(GetTdsValue(ATdsSensorPin),0);
-    Serial.print(",\"LM35\":");
-    Serial.print(GetLM35Value(ALM35SensorPin));
-    Serial.print(",\"PH\":");
-    Serial.print(GetPHvalue(APHSensorPin, WaterTempValue));
-    Serial.print(",\"Turbidity\":");
-    Serial.print(GetTurbidityValue(ATurbiditySensorPin));
-    Serial.println("}");
+      Serial.print("{\"WaterTemp\":");
+      Serial.print(WaterTempValue);
+      Serial.print(",\"TDS\":");
+      Serial.print(GetTdsValue(ATdsSensorPin),0);
+      Serial.print(",\"LM35\":");
+      Serial.print(GetLM35Value(ALM35SensorPin));
+      Serial.print(",\"PH\":");
+      Serial.print(GetPHvalue(APHSensorPin, WaterTempValue));
+      Serial.print(",\"Turbidity\":");
+      Serial.print(GetTurbidityValue(ATurbiditySensorPin));
+      Serial.println("}");
+      break;
+    }
+    default:{
+      jsonBuffer["res"]=-1;
+      jsonBuffer["msg"]="Invalid Command";
+      serializeJson(jsonBuffer, output);
+      Serial.println(output);
+      break;
+    }
   }
+    
 }
-
 void loop() {
   if(Serial.available()>0){
     if(Serial.peek()!='\n'){
