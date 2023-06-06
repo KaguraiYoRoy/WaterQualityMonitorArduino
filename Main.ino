@@ -31,15 +31,15 @@ void loop() {
   sensors.requestTemperatures();
   WaterTempValue = sensors.getTempCByIndex(0);
   
-  Serial.print("WaterTemp: ");
+  Serial.print("{\"WaterTemp\":");
   Serial.print(WaterTempValue);
-  Serial.print(" TDS:");
+  Serial.print(",\"TDS\":");
   Serial.print(GetTdsValue(ATdsSensorPin),0);
-  Serial.print(" LM35:");
+  Serial.print(",\"LM35\":");
   Serial.print(GetLM35Value(ALM35SensorPin));
-  Serial.print(" PH:");
+  Serial.print(",\"PH\":");
   Serial.print(GetPHvalue(APHSensorPin, WaterTempValue));
-  Serial.print(" Turbidity:");
+  Serial.print(",\"Turbidity\":");
   Serial.print(GetTurbidityValue(ATurbiditySensorPin));
-  Serial.println(".");
+  Serial.println("}");
 }
