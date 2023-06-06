@@ -30,7 +30,6 @@ void processcom(char cmd){
   StaticJsonDocument<200> jsonBuffer;
   String output;
   switch(cmd){
-    case 13:break;
     case 'g':{
       float WaterTempValue;
 
@@ -64,7 +63,7 @@ void processcom(char cmd){
 }
 void loop() {
   if(Serial.available()>0){
-    if(Serial.peek()!='\n'){
+    if(Serial.peek()!='\n' && Serial.peek()!='\r'){
       processcom(Serial.read());
     }
     else Serial.read();
