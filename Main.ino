@@ -36,7 +36,7 @@ void processcom(char cmd){
       sensors.requestTemperatures();
       WaterTempValue = sensors.getTempCByIndex(0);
   
-      jsonBuffer["result "] = 0;
+      jsonBuffer["result"] = 0;
       jsonBuffer["msg"] = "OK";
       JsonObject Values = jsonBuffer.createNestedObject("Values");
 
@@ -47,7 +47,7 @@ void processcom(char cmd){
       Values["Turbidity"] = GetTurbidityValue(ATurbiditySensorPin);
       
       serializeJson(jsonBuffer, output);
-      Serial.println(output);
+      Serial.print(output);
 
       break;
     }
