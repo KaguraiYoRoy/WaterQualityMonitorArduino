@@ -46,6 +46,9 @@ void processcom(char cmd){
       Values["PH"] = GetPHvalue(APHSensorPin, WaterTempValue);
       Values["Turbidity"] = GetTurbidityValue(ATurbiditySensorPin);
       
+      if(Values["TDS"]<0)
+        Values["TDS"]=0;
+      
       serializeJson(jsonBuffer, output);
       Serial.print(output);
 
@@ -55,7 +58,7 @@ void processcom(char cmd){
       jsonBuffer["result"]=-1;
       jsonBuffer["msg"]="Invalid Command";
       serializeJson(jsonBuffer, output);
-      Serial.println(output);
+      Serial.print(output);
       break;
     }
   }
