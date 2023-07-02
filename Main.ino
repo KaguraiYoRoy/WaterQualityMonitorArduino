@@ -16,9 +16,12 @@
 OneWire oneWire(DDS18B20SensorPin);
 DallasTemperature sensors(&oneWire);
 
+bool DebugMode;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200); 
+  DebugMode = false;
   pinMode(ATdsSensorPin, INPUT);
   pinMode(ALM35SensorPin, INPUT);
   pinMode(APHSensorPin, INPUT);
@@ -30,6 +33,7 @@ void processcom(char cmd){
   StaticJsonDocument<200> jsonBuffer;
   String output;
   switch(cmd){
+    case 'G':
     case 'g':{
       float WaterTempValue;
 
@@ -50,15 +54,34 @@ void processcom(char cmd){
         Values["TDS"]=0;
       
       serializeJson(jsonBuffer, output);
-      Serial.print(output);
+      if(DebugMode)
+        Serial.println(output);
+      else
+        Serial.print(output);
 
+      break;
+    }
+    case 'D':
+    case 'd':{
+      DebugMode = !DebugMode;
+      jsonBuffer["result"]=0;
+      jsonBuffer["msg"]="OK";
+      jsonBuffer["Debug"]=DebugMode?"On":"Off";
+      serializeJson(jsonBuffer, output);
+      if(DebugMode)
+        Serial.println(output);
+      else
+        Serial.print(output);
       break;
     }
     default:{
       jsonBuffer["result"]=-1;
       jsonBuffer["msg"]="Invalid Command";
       serializeJson(jsonBuffer, output);
-      Serial.print(output);
+      if(DebugMode)
+        Serial.println(output);
+      else
+        Serial.print(output);
       break;
     }
   }
