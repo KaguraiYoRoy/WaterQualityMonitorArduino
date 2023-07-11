@@ -7,11 +7,12 @@
 #include "PH.h"
 #include "Turbidity.h"
 
-#define ATdsSensorPin       A0
-#define ALM35SensorPin      A1
-#define APHSensorPin        A2
-#define ATurbiditySensorPin A3
-#define DDS18B20SensorPin   2
+#define APHSensorPin        A0
+#define ATurbiditySensorPin A1
+#define ALM35SensorPin      A2
+#define ATdsSensorPin       A3
+#define ABatteryVinPin      A4
+#define DDS18B20SensorPin   12
 
 OneWire oneWire(DDS18B20SensorPin);
 DallasTemperature sensors(&oneWire);
@@ -26,6 +27,7 @@ void setup() {
   pinMode(ALM35SensorPin, INPUT);
   pinMode(APHSensorPin, INPUT);
   pinMode(ATurbiditySensorPin, INPUT);
+  pinMode(ABatteryVinPin, INPUT);
   pinMode(DDS18B20SensorPin, INPUT);
 }
 
@@ -49,6 +51,7 @@ void processcom(char cmd){
       Values["LM35"] = GetLM35Value(ALM35SensorPin);
       Values["PH"] = GetPHvalue(APHSensorPin, WaterTempValue);
       Values["Turbidity"] = GetTurbidityValue(ATurbiditySensorPin);
+      Values["BatteryVoltage"] = analogRead(ABatteryVinPin) * (5.00 / 1023.00);
       
       if(Values["TDS"]<0)
         Values["TDS"]=0;
