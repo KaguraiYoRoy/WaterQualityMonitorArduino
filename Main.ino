@@ -8,10 +8,10 @@
 #include "Turbidity.h"
 
 #define APHSensorPin        A0
-#define ATurbiditySensorPin A1
+#define ABatteryVinPin      A1
 #define ALM35SensorPin      A2
-#define ATdsSensorPin       A3
-#define ABatteryVinPin      A4
+#define ATurbiditySensorPin A3
+#define ATdsSensorPin       A4
 #define DDS18B20SensorPin   12
 
 OneWire oneWire(DDS18B20SensorPin);
